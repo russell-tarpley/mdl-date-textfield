@@ -1,0 +1,37 @@
+{
+  "name": "mdl-currency-usd",
+  "version": "0.0.1",
+  "description": "mdl-currency-usd for material-design-lite",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rathxxx/mdl-currency-usd.git"
+  },
+  "keywords": [
+    "material",
+    "design",
+    "styleguide",
+    "style",
+    "guide",
+    "mdl",
+    "select"
+  ],
+  "author": "Russell Tarpley <russell.tarpley@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rathxxx/mdl-currnecy-usd/issues"
+  },
+  "homepage": "https://github.com/rathxxx/mdl-currency-usd",
+  "devDependencies": {
+    "bithound": "^1.7.0",
+    "bower": "^1.5.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.0.4",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^2.0.0"
+  },
+  "dependencies": {
+    "material-design-lite": "^1.2.1"
+  }
+}
