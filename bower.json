@@ -1,14 +1,14 @@
 {
-  "name": "mdl-currency-usd",
+  "name": "mdl-date-textfield",
   "version": "0.0.1",
-  "homepage": "https://github.com/rathxxx/mdl-currency-usd",
+  "homepage": "https://github.com/rathxxx/mdl-date-textfield",
   "authors": [
     "Russell Tarpley <russell.tarpley@gmail.com>"
   ],
-  "description": "mdl-currency-usd for material-design-lite",
+  "description": "mdl-date-textfield for material-design-lite",
   "main": [
-    "dist/mdl-currency-usd.min.css",
-    "dist/mdl-currency-usd.min.js"
+    "dist/mdl-date-textfield.min.css",
+    "dist/mdl-date-textfield.min.js"
   ],
   "keywords": [
     "material",

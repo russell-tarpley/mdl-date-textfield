@@ -24,7 +24,7 @@
       }).on('error', sass.logError))
       .pipe(rename(function(path) {
         path.dirname = '';
-        path.basename = 'mdl-currency-usd';
+        path.basename = 'mdl-date-textfield';
         path.extname = '.min.css';
       }))
       .pipe(sourcemaps.write('./'))
@@ -34,7 +34,7 @@
   gulp.task('sass', function () {
     gulp
       .src(sassFiles)
-      .pipe(concat('mdl-currency-usd.scss'))
+      .pipe(concat('mdl-date-textfield.scss'))
       .pipe(sass({
         sourceComments: false
       }).on('error', sass.logError))
@@ -44,7 +44,7 @@
   gulp.task('js-compress', function() {
     gulp
       .src(jsFiles)
-      .pipe(uglify('mdl-currency-usd.min.js', {
+      .pipe(uglify('mdl-date-textfield.min.js', {
         outSourceMap: true
       }))
       .pipe(gulp.dest('./dist'));
@@ -55,7 +55,7 @@
       .src(jsFiles)
       .pipe(rename(function(path) {
         path.dirname = '';
-        path.basename = 'mdl-currency-usd';
+        path.basename = 'mdl-date-textfield';
         path.extname = '.js';
       }))
       .pipe(gulp.dest('./dist'));
