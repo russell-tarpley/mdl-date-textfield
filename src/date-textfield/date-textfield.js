@@ -2,7 +2,7 @@
     'use strict';
 
     /**
-     * Class constructor for Textfield MDL component.
+     * Class constructor for Date Textfield MDL component.
      * Implements MDL component design pattern defined at:
      * https://github.com/jasonmayes/mdl-component-design-pattern
      *
@@ -69,6 +69,13 @@
      * @private
      */
     MaterialDateTextfield.prototype.onFocus_ = function (event) {
+        var value = this.input_.value;
+        var hit = value.indexOf('/');
+        while (hit > -1) {
+            value = value.replace('/', '');
+            hit = value.indexOf('/');
+        }
+        this.input_.value = value;
         this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
     };
 
@@ -79,6 +86,26 @@
      * @private
      */
     MaterialDateTextfield.prototype.onBlur_ = function (event) {
+        //Verify Input and Format Accordingly
+        var strip = ['/', '-', '.'];
+        var value = this.input_.value;
+        //remove all formatting characters that may have been entered
+        for (var x = 0, len = strip.length; x < len; x++) {
+            var hit = value.indexOf(strip[x]);
+            while (hit > -1) {
+                value = value.replace(strip[x], '');
+                hit = value.indexOf(strip[x]);
+            }
+        }
+        if (value.length !== 8) {
+            //Invalid entry
+            this.element_.classList.add(this.CssClasses_.IS_INVALID);
+        } else {
+            //format value
+            var newValue = [value.slice(0, 2), '/', value.slice(2,4), '/', value.slice(4)].join('');
+            value = newValue;
+        }
+        this.input_.value = value;
         this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
     };
 

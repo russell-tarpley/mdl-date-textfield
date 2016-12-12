@@ -16,6 +16,7 @@
 
 
 // The container for the whole component.
+.mdl-date-textfield {
   position: relative;
   font-size: $input-text-font-size;
   display: inline-block;
@@ -33,14 +34,17 @@
 }
 
 // Optional class to align right.
+.mdl-date-textfield--align-right {
   text-align: right;
 }
 
 // Optional class to display at full width.
+.mdl-date-textfield--full-width {
   width: 100%;
 }
 
 // Optional class to make the text field expandable.
+.mdl-date-textfield--expandable {
   min-width: $input-text-button-size;
   width: auto;
   min-height: $input-text-button-size;
@@ -52,6 +56,7 @@
 }
 
 // Styling for the input element.
+.mdl-date-textfield__input {
   border: none;
   border-bottom: 1px solid $input-text-bottom-border-color;
   display: block;
@@ -74,23 +79,29 @@
     margin: 0;
   }
 
+  .mdl-date-textfield.is-focused & {
     outline: none;
   }
 
+  .mdl-date-textfield.is-invalid & {
     border-color: $input-text-error-color;
     box-shadow: none;
   }
 
+  fieldset[disabled] .mdl-date-textfield &,
+  .mdl-date-textfield.is-disabled & {
     background-color: transparent;
     border-bottom: 1px dotted $input-text-disabled-color;
     color: $input-text-disabled-text-color;
   }
 }
 
+.mdl-date-textfield textarea.mdl-date-textfield__input {
   display: block;
 }
 
 // Styling for the label / floating label.
+.mdl-date-textfield__label {
   bottom: 0;
   color: $input-text-label-color;
   font-size: $input-text-font-size;
@@ -105,28 +116,41 @@
   white-space: nowrap;
   text-align: left;
 
+  .mdl-date-textfield.is-dirty &,
+  .mdl-date-textfield.has-placeholder & {
     visibility: hidden;
   }
 
   // Floating Label
+  .mdl-date-textfield--floating-label & {
     @include material-animation-default();
   }
 
+  .mdl-date-textfield--floating-label.has-placeholder & {
     transition: none;
   }
 
+  fieldset[disabled] .mdl-date-textfield &,
+  .mdl-date-textfield.is-disabled.is-disabled & {
     color: $input-text-disabled-text-color;
   }
 
+  .mdl-date-textfield--floating-label.is-focused &,
+  .mdl-date-textfield--floating-label.is-dirty &,
+  .mdl-date-textfield--floating-label.has-placeholder & {
     color: $input-text-highlight-color;
     font-size : $input-text-floating-label-fontsize;
     top: $input-text-vertical-spacing - ($input-text-floating-label-fontsize + $input-text-padding);
     visibility: visible;
   }
 
+  .mdl-date-textfield--floating-label.is-focused .mdl-date-textfield__expandable-holder &,
+  .mdl-date-textfield--floating-label.is-dirty .mdl-date-textfield__expandable-holder &,
+  .mdl-date-textfield--floating-label.has-placeholder .mdl-date-textfield__expandable-holder & {
     top: -($input-text-floating-label-fontsize + $input-text-padding);
   }
 
+  .mdl-date-textfield--floating-label.is-invalid & {
     color: $input-text-error-color;
     font-size: $input-text-floating-label-fontsize;
   }
@@ -144,16 +168,19 @@
     width: 10px;
   }
 
+  .mdl-date-textfield.is-focused &:after {
     left: 0;
     visibility: visible;
     width: 100%;
   }
 
+  .mdl-date-textfield.is-invalid &:after {
     background-color: $input-text-error-color;
   }
 }
 
 // TextField Error.
+.mdl-date-textfield__error {
   color: $input-text-error-color;
   position: absolute;
   font-size: $input-text-floating-label-fontsize;
@@ -161,11 +188,13 @@
   visibility: hidden;
   display: block;
 
+  .mdl-date-textfield.is-invalid & {
     visibility: visible;
   }
 }
 
 // Expandable Holder.
+.mdl-date-textfield__expandable-holder {
   display: inline-block;
   position: relative;
   margin-left: $input-text-button-size;
@@ -179,12 +208,14 @@
   // inner element :(
   max-width: 0.1px;
 
+  .mdl-date-textfield.is-focused &, .mdl-date-textfield.is-dirty & {
     // This is an unfortunate hack. Animating between widths in percent (%)
     // in many browsers (Chrome, Firefox) only animates the inner visual style
     // of the input - the outer bounding box still 'jumps'.
     // Thus assume a sensible maximum, and animate to/from that value.
     max-width: 600px;
   }
+  .mdl-date-textfield__label:after {
     bottom: 0;
   }
 }
