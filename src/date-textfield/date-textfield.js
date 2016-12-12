@@ -206,7 +206,7 @@
     /**
    * Initialize element.
    */
-    MaterialTextfield.prototype.init = function () {
+    MaterialDateTextfield.prototype.init = function () {
 
         if (this.element_) {
             this.label_ = this.element_.querySelector('.' + this.CssClasses_.LABEL);
