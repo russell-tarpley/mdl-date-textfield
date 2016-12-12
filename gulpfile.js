@@ -10,7 +10,7 @@
           './src/global.scss',
           './src/**/*.scss'
         ],
-        uglify = require('gulp-uglify'),
+        uglify = require('gulp-uglifyjs'),
         jsFiles = ['src/**/*.js'];
 
     gulp.task('sass-compress', function () {
