@@ -86,6 +86,10 @@
      * @private
      */
     MaterialDateTextfield.prototype.onBlur_ = function (event) {
+        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+    };
+
+    MaterialDateTextfield.prototype.onChange_ = function (event) {
         //Verify Input and Format Accordingly
         var strip = ['/', '-', '.'];
         var value = this.input_.value;
@@ -102,11 +106,10 @@
             this.element_.classList.add(this.CssClasses_.IS_INVALID);
         } else {
             //format value
-            var newValue = [value.slice(0, 2), '/', value.slice(2,4), '/', value.slice(4)].join('');
+            var newValue = [value.slice(0, 2), '/', value.slice(2, 4), '/', value.slice(4)].join('');
             value = newValue;
         }
         this.input_.value = value;
-        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
     };
 
     /**
@@ -257,10 +260,12 @@
                 this.boundFocusHandler = this.onFocus_.bind(this);
                 this.boundBlurHandler = this.onBlur_.bind(this);
                 this.boundResetHandler = this.onReset_.bind(this);
+                this.boundChangeHandler = this.onChange_.bind(this);
                 this.input_.addEventListener('input', this.boundUpdateClassesHandler);
                 this.input_.addEventListener('focus', this.boundFocusHandler);
                 this.input_.addEventListener('blur', this.boundBlurHandler);
                 this.input_.addEventListener('reset', this.boundResetHandler);
+                this.input_.addEventListener('change', this.boundChangeHandler);
 
                 if (this.maxRows !== this.Constant_.NO_MAX_ROWS) {
                     // TODO: This should handle pasting multi line text.
