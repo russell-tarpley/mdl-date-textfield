@@ -48,21 +48,6 @@
     };
 
     /**
-   * Handle input being entered.
-   *
-   * @param {Event} event The event that fired.
-   * @private
-   */
-    MaterialDateTextfield.prototype.onKeyDown_ = function (event) {
-        var currentRowCount = event.target.value.split('\n').length;
-        if (event.keyCode === 13) {
-            if (currentRowCount >= this.maxRows) {
-                event.preventDefault();
-            }
-        }
-    };
-
-    /**
      * Handle focus.
      *
      * @param {Event} event The event that fired.
@@ -83,26 +68,43 @@
     };
 
     MaterialDateTextfield.prototype.onChange_ = function (event) {
-        //Verify Input and Format Accordingly
-        var strip = ['/', '-', '.'];
-        var value = this.input_.value;
-        //remove all formatting characters that may have been entered
-        for (var x = 0, len = strip.length; x < len; x++) {
-            var hit = value.indexOf(strip[x]);
-            while (hit > -1) {
-                value = value.replace(strip[x], '');
-                hit = value.indexOf(strip[x]);
-            }
-        }
-        if (value.length !== 8) {
-            //Invalid entry
+        //var pattern = /^\d{1,2}\/?-?\d{1,2}\/?-?\d{4}$/;
+        var pattern = /^(\d{1,2})\/?-?(\d{1,2})\/?-?(\d{4})/;
+        //Test the input string for basic format (optional '/' '-')
+        if (!pattern.test(this.input_.value)) {
             this.element_.classList.add(this.CssClasses_.IS_INVALID);
-        } else {
-            //format value
-            var newValue = [value.slice(0, 2), '/', value.slice(2, 4), '/', value.slice(4)].join('');
-            value = newValue;
+            return false;
         }
-        this.input_.value = value;
+        
+        var matches = pattern.exec(this.input_.value);
+        var day = parseInt(matches[2], 10);
+        var month = parseInt(matches[1], 10);
+        var year = parseInt(matches[3], 10);
+        
+        // Check the ranges of month and year
+        if (year < 1000 || year > 3000 || month == 0 || month > 12) {
+            this.element_.classList.add(this.CssClasses_.IS_INVALID);
+            return false;
+        }
+            
+        var monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        // Adjust for leap years
+        if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+            monthLength[1] = 29;
+
+        // Check the range of the day
+        if (day > 0 && day <= monthLength[month - 1]) {
+            if (matches[1].length < 2) {
+                matches[1] = "0" + matches[1];
+            }
+            if (matches[2].length < 2) {
+                matches[2] = "0" + matches[2];
+            }
+            this.input_.value = matches[1] + "/" + matches[2] + "/" + matches[3];
+        } else {
+            this.element_.classList.add(this.CssClasses_.IS_INVALID);
+        }
     };
 
     /**
@@ -260,14 +262,7 @@
                 this.input_.addEventListener('reset', this.boundResetHandler);
                 this.input_.addEventListener('change', this.boundChangeHandler);
 
-                if (this.maxRows !== this.Constant_.NO_MAX_ROWS) {
-                    // TODO: This should handle pasting multi line text.
-                    // Currently doesn't.
-                    this.boundKeyDownHandler = this.onKeyDown_.bind(this);
-                    this.input_.addEventListener('keydown', this.boundKeyDownHandler);
-                }
-                var invalid = this.element_.classList
-                  .contains(this.CssClasses_.IS_INVALID);
+                var invalid = this.element_.classList.contains(this.CssClasses_.IS_INVALID);
                 this.updateClasses_();
                 this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
                 if (invalid) {
