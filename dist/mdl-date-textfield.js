@@ -69,13 +69,6 @@
      * @private
      */
     MaterialDateTextfield.prototype.onFocus_ = function (event) {
-        var value = this.input_.value;
-        var hit = value.indexOf('/');
-        while (hit > -1) {
-            value = value.replace('/', '');
-            hit = value.indexOf('/');
-        }
-        this.input_.value = value;
         this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
     };
 
