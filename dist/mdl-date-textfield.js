@@ -68,7 +68,6 @@
     };
 
     MaterialDateTextfield.prototype.onChange_ = function (event) {
-        //var pattern = /^\d{1,2}\/?-?\d{1,2}\/?-?\d{4}$/;
         var pattern = /^(\d{1,2})\/?-?(\d{1,2})\/?-?(\d{4})/;
         //Test the input string for basic format (optional '/' '-')
         if (!pattern.test(this.input_.value)) {
