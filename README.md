@@ -59,7 +59,7 @@ To use any MDL component, you must include the minified CSS and JavaScript files
         <label class="mdl-date-textfield__label" for="sample3">Date Example...</label>
 </div>
 ```
-The select field component is ready for use.
+The Date field component is ready for use.
 
 #### Examples
 
@@ -71,7 +71,7 @@ Date field with a standard label.
 </div>
 ```
 
-Select field with a floating label.
+Date field with a floating label.
 ```html
 <div class="mdl-date-textfield mdl-js-date-textfield mdl-date-textfield--floating-label">
         <input class="mdl-date-textfield__input" type="text" id="sample4">
@@ -79,7 +79,7 @@ Select field with a floating label.
 </div>
 ```
 
-Select field with a standard label, and error message.
+Date field with a standard label, and error message.
 ```html
 <div class="mdl-date-textfield mdl-js-date-textfield">
         <input class="mdl-date-textfield__input" type="text" id="sample4">
