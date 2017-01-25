@@ -149,6 +149,11 @@
     top: -($input-text-floating-label-fontsize + $input-text-padding);
   }
 
+  // Fix for field labels retaining their color after losing focus
+  :not(.is-invalid).mdl-date-textfield--floating-label.is-focused > .mdl-date-textfield__input:focus + & {
+    color: $input-text-highlight-color;    
+  }
+
   .mdl-date-textfield--floating-label.is-invalid & {
     color: $input-text-error-color;
     font-size: $input-text-floating-label-fontsize;
@@ -176,11 +181,6 @@
   .mdl-date-textfield.is-invalid &:after {
     background-color: $input-text-error-color;
   }
-}
-
-// Fix for field labels retaining their color after losing focus
-.mdl-date-textfield--floating-label.is-focused > .mdl-date-textfield__input:focus + .mdl-date-textfield__label {
-  color: $input-text-highlight-color;    
 }
 
 // TextField Error.
