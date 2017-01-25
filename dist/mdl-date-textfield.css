@@ -40,6 +40,8 @@
  * -----Data table
  * -----Dialog
  * -----Snackbar
+ * -----Tooltip
+ * -----Chip
  *
  * Even though all variables have the `!default` directive, most of them
  * should not be changed as they are dependent one another. This can cause
@@ -148,6 +150,7 @@
 /* DIALOG */
 /* SNACKBAR */
 /* TOOLTIP */
+/* CHIP */
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
@@ -267,7 +270,7 @@
   .mdl-date-textfield--floating-label.is-focused .mdl-date-textfield__label,
   .mdl-date-textfield--floating-label.is-dirty .mdl-date-textfield__label,
   .mdl-date-textfield--floating-label.has-placeholder .mdl-date-textfield__label {
-    color: rgb(33,150,243);
+    color: rgb(63,81,181);
     font-size: 12px;
     top: 4px;
     visibility: visible; }
@@ -279,7 +282,7 @@
     color: rgb(213,0,0);
     font-size: 12px; }
   .mdl-date-textfield__label:after {
-    background-color: rgb(33,150,243);
+    background-color: rgb(63,81,181);
     bottom: 20px;
     content: '';
     height: 2px;

@@ -1,6 +1,12 @@
-(function() {
+(function () {
     'use strict';
-
+    //String startsWith polyfill for IE 11
+    if (!String.prototype.startsWith) {
+        String.prototype.startsWith = function (searchString, position) {
+            position = position || 0;
+            return this.substr(position, searchString.length) === searchString;
+        };
+    }
     /**
      * Class constructor for Date Textfield MDL component.
      * Implements MDL component design pattern defined at:
@@ -11,7 +17,6 @@
      */
     var MaterialDateTextfield = function MaterialDateTextfield(element) {
         this.element_ = element;
-        this.maxRows = this.Constant_.NO_MAX_ROWS;
         // Initialize instance.
         this.init();
     };
@@ -23,10 +28,7 @@
      * @enum {string | number}
      * @private
      */
-    MaterialDateTextfield.prototype.Constant_ = {
-        NO_MAX_ROWS: -1,
-        MAX_ROWS_ATTRIBUTE: 'maxrows'
-    };
+    MaterialDateTextfield.prototype.Constant_ = {};
 
     /**
      * Store strings for class names defined by this component that are used in
@@ -43,9 +45,169 @@
         IS_FOCUSED: 'is-focused',
         IS_DISABLED: 'is-disabled',
         IS_INVALID: 'is-invalid',
-        IS_UPGRADED: 'is-upgraded',
-        HAS_PLACEHOLDER: 'has-placeholder'
+        IS_UPGRADED: 'is-upgraded'
     };
+    //Adapted from lodash
+    //Added here to avoid extra dependency
+    MaterialDateTextfield.prototype.flatMap = function (xs, f) {
+        var results = [];
+        for (var i = 0; i < xs.length; i++) {
+            var result = f(xs[i]);
+            for (var j = 0; j < result.length; j++) {
+                results.push(result[j]);
+            }
+        }
+        return results;
+    };
+    MaterialDateTextfield.prototype.range = function(n,m){
+        var results = [];
+        for (; n < m; n++) {
+            results.push(n);
+        }
+        return results;
+    };
+    MaterialDateTextfield.prototype.zipWith = function (xs, ys, f) {
+        var results = [];
+        var n = Math.min(xs.length, ys.length);
+        for (var i = 0; i < n; i++) {
+            results.push(f(xs[i], ys[i]));
+        }
+        return results;
+    };
+
+
+    //Routines
+    MaterialDateTextfield.prototype.pattern_ = function () { };
+    MaterialDateTextfield.prototype.pattern_.literal = function (value) {
+        var lit = new MaterialDateTextfield.prototype.pattern_();
+        lit.literal = true;
+        lit.value = value;
+        return lit;
+    };
+    MaterialDateTextfield.prototype.pattern_.sequence = function (left, right) {
+        var seq = new MaterialDateTextfield.prototype.pattern_();
+        seq.sequence = true;
+        seq.left = left;
+        seq.right = right;
+        return seq;
+    };
+    MaterialDateTextfield.prototype.pattern_.choice = function (xs) {
+        var ch = new MaterialDateTextfield.prototype.pattern_();
+        ch.choice = xs;
+        return ch;
+    };
+
+    //Matching
+    MaterialDateTextfield.prototype.match_ = function () { };
+    MaterialDateTextfield.prototype.match_.continue = function (string) {
+        var cont = new MaterialDateTextfield.prototype.match_();
+        cont.continue = true;
+        cont.value = string;
+        return cont;
+    };
+    MaterialDateTextfield.prototype.match_.success = function () {
+        var succ = new MaterialDateTextfield.prototype.match_();
+        succ.success = true;
+        return succ;
+    };
+    MaterialDateTextfield.prototype.match_.failure = function () {
+        var fail = new MaterialDateTextfield.prototype.match_();
+        fail.failure = true;
+        return fail;
+    };
+    MaterialDateTextfield.prototype.match_.incomplete = function () {
+        var inc = new MaterialDateTextfield.prototype.match_();
+        inc.incomplete = true;
+        return inc;
+    };
+    
+    //Execution
+    MaterialDateTextfield.prototype.run_ = function (input, pattern) {
+        if (pattern.literal) {
+            if (input === pattern.value) {
+                return [MaterialDateTextfield.prototype.match_.success()];
+            }
+            else if (input.startsWith(pattern.value)) {
+                return [MaterialDateTextfield.prototype.match_.continue(input.substr(pattern.value.length))];
+            }
+            else if (pattern.value.startsWith(input)) {
+                return [MaterialDateTextfield.prototype.match_.incomplete()];
+            }
+            else {
+                return [MaterialDateTextfield.prototype.match_.failure()];
+            }
+        }
+        else if (pattern.choice) {
+            return MaterialDateTextfield.prototype.flatMap(pattern.choice, function (x) { return MaterialDateTextfield.prototype.run_(input, x); });
+        }
+        else if (pattern.sequence) {
+            return MaterialDateTextfield.prototype.flatMap(MaterialDateTextfield.prototype.run_(input, pattern.left), function (result) {
+                if (result.failure) {
+                    return [];
+                }
+                else if (result.success) {
+                    return MaterialDateTextfield.prototype.run_('', pattern.right);
+                }
+                else if (result.incomplete) {
+                    return [result];
+                }
+                else if (result.continue) {
+                    return MaterialDateTextfield.prototype.run_(result.value, pattern.right);
+                }
+                else {
+                    throw pattern;
+                }
+            });
+        }
+        else {
+            throw pattern;
+        }
+    };
+
+    MaterialDateTextfield.prototype.complete_ = function (input, pattern) {
+        return this.run_(input, pattern).some(function (x) { return x.success; });
+    };
+
+    MaterialDateTextfield.prototype.partial_ = function (input, pattern) {
+        return this.run_(input, pattern).some(function (x) { return x.incomplete; });
+    };
+
+    MaterialDateTextfield.prototype.zeroFill_ = function (x) {
+        const s = x.toString();
+        const patterns = (s.length === 1 ? [s, '0' + x] : [s]).map(MaterialDateTextfield.prototype.pattern_.literal);
+        return MaterialDateTextfield.prototype.pattern_.choice(patterns);
+    };
+
+    MaterialDateTextfield.prototype.Months = MaterialDateTextfield.prototype.range(1, 13).map(MaterialDateTextfield.prototype.zeroFill_);
+    MaterialDateTextfield.prototype.Days = MaterialDateTextfield.prototype.range(1, 29).map(MaterialDateTextfield.prototype.zeroFill_);
+    MaterialDateTextfield.prototype.Years = MaterialDateTextfield.prototype.pattern_.choice(MaterialDateTextfield.prototype.range(1900, 2101).map(function (x) { return MaterialDateTextfield.prototype.pattern_.literal(x.toString()); }));
+    MaterialDateTextfield.prototype.Delimiters = MaterialDateTextfield.prototype.pattern_.choice(['-', '/', ''].map(MaterialDateTextfield.prototype.pattern_.literal));
+    MaterialDateTextfield.prototype.DaysInAMonth = MaterialDateTextfield.prototype.zipWith(MaterialDateTextfield.prototype.Months, [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+    function (month, days) { return { month: month, days: days }; });
+    MaterialDateTextfield.prototype.AdditionalDays = MaterialDateTextfield.prototype.pattern_.choice(
+        MaterialDateTextfield.prototype.flatMap(MaterialDateTextfield.prototype.DaysInAMonth, function (pair) {
+            return MaterialDateTextfield.prototype.range(29, pair.days + 1)
+              .map(function (x) {
+                  return [pair.month, MaterialDateTextfield.prototype.Delimiters, MaterialDateTextfield.prototype.pattern_.literal(x.toString())]
+                    .reduce(MaterialDateTextfield.prototype.pattern_.sequence);
+              });
+        }));
+    MaterialDateTextfield.prototype.isLeapYear = function (n) {
+        return (n % 4) === 0 && ((n % 100) !== 0 || (n % 400) === 0);
+    };
+    MaterialDateTextfield.prototype.LeapDays = MaterialDateTextfield.prototype.pattern_.choice(
+        MaterialDateTextfield.prototype.range(1900, 2101)
+        .filter(MaterialDateTextfield.prototype.isLeapYear)
+        .map(function (x) {
+            return [MaterialDateTextfield.prototype.zeroFill_(2), MaterialDateTextfield.prototype.Delimiters, MaterialDateTextfield.prototype.pattern_.literal('29'), MaterialDateTextfield.prototype.Delimiters, MaterialDateTextfield.prototype.pattern_.literal(x.toString())]
+        .reduce(MaterialDateTextfield.prototype.pattern_.sequence);
+    }));
+
+    MaterialDateTextfield.prototype.DatePattern = MaterialDateTextfield.prototype.pattern_.choice([
+         [MaterialDateTextfield.prototype.pattern_.choice(MaterialDateTextfield.prototype.Months), MaterialDateTextfield.prototype.Delimiters, MaterialDateTextfield.prototype.pattern_.choice(MaterialDateTextfield.prototype.Days), MaterialDateTextfield.prototype.Delimiters, MaterialDateTextfield.prototype.Years].reduce(MaterialDateTextfield.prototype.pattern_.sequence),
+    [MaterialDateTextfield.prototype.AdditionalDays, MaterialDateTextfield.prototype.Delimiters, MaterialDateTextfield.prototype.Years].reduce(MaterialDateTextfield.prototype.pattern_.sequence),
+    MaterialDateTextfield.prototype.LeapDays
+    ]);
 
     /**
      * Handle focus.
@@ -55,6 +217,10 @@
      */
     MaterialDateTextfield.prototype.onFocus_ = function (event) {
         this.element_.classList.add(this.CssClasses_.IS_FOCUSED);
+        //Strip any slashes prior to matching
+        while (this.input_.value.indexOf("/") !== -1) {
+            this.input_.value = this.input_.value.replace("/", "");
+        }
     };
 
     /**
@@ -63,46 +229,38 @@
      * @param {Event} event The event that fired.
      * @private
      */
-    MaterialDateTextfield.prototype.onBlur_ = function (event) {
-        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+    MaterialDateTextfield.prototype.onInput_ = function (event) {
+        console.log("partial", this.partial_(this.input_.value, this.DatePattern), "complete", this.complete_(this.input_.value, this.DatePattern));
+        this.updateClasses_();
     };
 
-    MaterialDateTextfield.prototype.onChange_ = function (event) {
-        var pattern = /^(\d{1,2})\/?-?(\d{1,2})\/?-?(\d{4})/;
-        //Test the input string for basic format (optional '/' '-')
-        if (!pattern.test(this.input_.value)) {
-            this.element_.classList.add(this.CssClasses_.IS_INVALID);
-            return false;
-        }
-        
-        var matches = pattern.exec(this.input_.value);
-        var day = parseInt(matches[2], 10);
-        var month = parseInt(matches[1], 10);
-        var year = parseInt(matches[3], 10);
-        
-        // Check the ranges of month and year
-        if (year < 1000 || year > 3000 || month == 0 || month > 12) {
-            this.element_.classList.add(this.CssClasses_.IS_INVALID);
-            return false;
-        }
-            
-        var monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-        // Adjust for leap years
-        if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
-            monthLength[1] = 29;
-
-        // Check the range of the day
-        if (day > 0 && day <= monthLength[month - 1]) {
-            if (matches[1].length < 2) {
-                matches[1] = "0" + matches[1];
+    /**
+     * Handle blur event
+     * @param {Event} event The event that fired
+     * @private
+     */
+    MaterialDateTextfield.prototype.onBlur_ = function (event) {
+        this.element_.classList.remove(this.CssClasses_.IS_FOCUSED);
+        this.updateClasses_();
+        //Handle Formatting when valid and value exists
+        if (!this.element_.classList.contains(this.CssClasses_.IS_INVALID) && this.element_.classList.contains(this.CssClasses_.IS_DIRTY)) {
+            if (this.complete_(this.input_.value, this.DatePattern)) {
+                //Update input value adding slashes
+                var pattern = /^(\d{1,2})\/?-?(\d{1,2})\/?-?(\d{4})/;
+                var matches = pattern.exec(this.input_.value);
+                var day = parseInt(matches[2], 10);
+                var month = parseInt(matches[1], 10);
+                var year = parseInt(matches[3], 10);
+                if (matches[1].length < 2) {
+                    matches[1] = "0" + matches[1];
+                }
+                if (matches[2].length < 2) {
+                    matches[2] = "0" + matches[2];
+                }
+                this.input_.value = matches[1] + "/" + matches[2] + "/" + matches[3];
+            } else {
+                this.element_.classList.add(this.CssClasses_.IS_INVALID);
             }
-            if (matches[2].length < 2) {
-                matches[2] = "0" + matches[2];
-            }
-            this.input_.value = matches[1] + "/" + matches[2] + "/" + matches[3];
-        } else {
-            this.element_.classList.add(this.CssClasses_.IS_INVALID);
         }
     };
 
@@ -167,7 +325,7 @@
      */
     MaterialDateTextfield.prototype.checkValidity = function () {
         if (this.input_.validity) {
-            if (this.input_.validity.valid) {
+            if (this.input_.validity.valid && (this.partial_(this.input_.value, this.DatePattern) || this.complete_(this.input_.value, this.DatePattern))) {
                 this.element_.classList.remove(this.CssClasses_.IS_INVALID);
             } else {
                 this.element_.classList.add(this.CssClasses_.IS_INVALID);
@@ -250,26 +408,23 @@
                     this.element_.classList.add(this.CssClasses_.HAS_PLACEHOLDER);
                 }
 
-                this.boundUpdateClassesHandler = this.updateClasses_.bind(this);
+                this.boundInputHandler = this.onInput_.bind(this);
                 this.boundFocusHandler = this.onFocus_.bind(this);
                 this.boundBlurHandler = this.onBlur_.bind(this);
                 this.boundResetHandler = this.onReset_.bind(this);
-                this.boundChangeHandler = this.onChange_.bind(this);
-                this.input_.addEventListener('input', this.boundUpdateClassesHandler);
+                this.input_.addEventListener('input', this.boundInputHandler);
                 this.input_.addEventListener('focus', this.boundFocusHandler);
                 this.input_.addEventListener('blur', this.boundBlurHandler);
                 this.input_.addEventListener('reset', this.boundResetHandler);
-                this.input_.addEventListener('change', this.boundChangeHandler);
 
-                var invalid = this.element_.classList.contains(this.CssClasses_.IS_INVALID);
-                this.updateClasses_();
+                this.onInput_();
                 this.element_.classList.add(this.CssClasses_.IS_UPGRADED);
-                if (invalid) {
-                    this.element_.classList.add(this.CssClasses_.IS_INVALID);
-                }
                 if (this.input_.hasAttribute('autofocus')) {
                     this.element_.focus();
                     this.checkFocus();
+                }
+                if (this.element_.classList.contains(this.CssClasses_.IS_DIRTY)) {
+                    this.onBlur_();
                 }
             }
         }
