@@ -67,7 +67,7 @@
   width: $input-text-width;
   background: none;
   text-align: left;
-  color: inherit;
+  color: $input-active-text-color;
 
   &[type="number"] {
     -moz-appearance: textfield;
@@ -138,7 +138,6 @@
   .mdl-date-textfield--floating-label.is-focused &,
   .mdl-date-textfield--floating-label.is-dirty &,
   .mdl-date-textfield--floating-label.has-placeholder & {
-    color:inherit; //Fix for field labels retaining their color after losing focus
     font-size : $input-text-floating-label-fontsize;
     top: $input-text-vertical-spacing - ($input-text-floating-label-fontsize + $input-text-padding);
     visibility: visible;

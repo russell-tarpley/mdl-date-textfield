@@ -40,6 +40,8 @@
  * -----Data table
  * -----Dialog
  * -----Snackbar
+ * -----Tooltip
+ * -----Chip
  *
  * Even though all variables have the `!default` directive, most of them
  * should not be changed as they are dependent one another. This can cause
@@ -148,6 +150,7 @@
 /* DIALOG */
 /* SNACKBAR */
 /* TOOLTIP */
+/* CHIP */
 /**
  * Copyright 2015 Google Inc. All Rights Reserved.
  *
@@ -219,7 +222,7 @@
   width: 100%;
   background: none;
   text-align: left;
-  color: inherit; }
+  color: rgba(0,0,0, 0.87); }
   .mdl-date-textfield__input[type="number"] {
     -moz-appearance: textfield; }
   .mdl-date-textfield__input[type="number"]::-webkit-inner-spin-button, .mdl-date-textfield__input[type="number"]::-webkit-outer-spin-button {
@@ -233,15 +236,15 @@
   fieldset[disabled] .mdl-date-textfield .mdl-date-textfield__input,
   .mdl-date-textfield.is-disabled .mdl-date-textfield__input {
     background-color: transparent;
-    border-bottom: 1px dotted rgba(0,0,0, 0.12);
-    color: rgba(0,0,0, 0.26); }
+    border-bottom: 1px dotted rgba(0,0,0, 0.38);
+    color: rgba(0,0,0, 0.38); }
 
 .mdl-date-textfield textarea.mdl-date-textfield__input {
   display: block; }
 
 .mdl-date-textfield__label {
   bottom: 0;
-  color: rgba(0,0,0, 0.26);
+  color: rgba(0,0,0, 0.38);
   font-size: 16px;
   left: 0;
   right: 0;
@@ -263,11 +266,10 @@
     transition: none; }
   fieldset[disabled] .mdl-date-textfield .mdl-date-textfield__label,
   .mdl-date-textfield.is-disabled.is-disabled .mdl-date-textfield__label {
-    color: rgba(0,0,0, 0.26); }
+    color: rgba(0,0,0, 0.38); }
   .mdl-date-textfield--floating-label.is-focused .mdl-date-textfield__label,
   .mdl-date-textfield--floating-label.is-dirty .mdl-date-textfield__label,
   .mdl-date-textfield--floating-label.has-placeholder .mdl-date-textfield__label {
-    color: inherit;
     font-size: 12px;
     top: 4px;
     visibility: visible; }
