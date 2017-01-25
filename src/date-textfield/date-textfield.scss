@@ -138,7 +138,7 @@
   .mdl-date-textfield--floating-label.is-focused &,
   .mdl-date-textfield--floating-label.is-dirty &,
   .mdl-date-textfield--floating-label.has-placeholder & {
-    color: $input-text-highlight-color;
+    color:inherit; //Fix for field labels retaining their color after losing focus
     font-size : $input-text-floating-label-fontsize;
     top: $input-text-vertical-spacing - ($input-text-floating-label-fontsize + $input-text-padding);
     visibility: visible;
@@ -177,6 +177,11 @@
   .mdl-date-textfield.is-invalid &:after {
     background-color: $input-text-error-color;
   }
+}
+
+// Fix for field labels retaining their color after losing focus
+.mdl-date-textfield--floating-label.is-focused > .mdl-date-textfield__input:focus + .mdl-date-textfield__label {
+  color: $input-text-highlight-color;    
 }
 
 // TextField Error.

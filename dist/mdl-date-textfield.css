@@ -267,7 +267,7 @@
   .mdl-date-textfield--floating-label.is-focused .mdl-date-textfield__label,
   .mdl-date-textfield--floating-label.is-dirty .mdl-date-textfield__label,
   .mdl-date-textfield--floating-label.has-placeholder .mdl-date-textfield__label {
-    color: rgb(33,150,243);
+    color: inherit;
     font-size: 12px;
     top: 4px;
     visibility: visible; }
@@ -295,6 +295,9 @@
     width: 100%; }
   .mdl-date-textfield.is-invalid .mdl-date-textfield__label:after {
     background-color: rgb(213,0,0); }
+
+.mdl-date-textfield--floating-label.is-focused > .mdl-date-textfield__input:focus + .mdl-date-textfield__label {
+  color: rgb(33,150,243); }
 
 .mdl-date-textfield__error {
   color: rgb(213,0,0);
